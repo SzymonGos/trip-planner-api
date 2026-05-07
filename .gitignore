@@ -27,3 +27,5 @@ replay_pid*
 HELP.md
 .idea
 target/
+.DS_Store
+.env
