@@ -1,4 +1,4 @@
-package entity;
+package com.szymong.trip_planner_api.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "users")
 public class User {
-
 
   @Id
   @GeneratedValue(strategy =  GenerationType.IDENTITY)
