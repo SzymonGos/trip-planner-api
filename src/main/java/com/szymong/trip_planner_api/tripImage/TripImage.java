@@ -1,5 +1,6 @@
 package com.szymong.trip_planner_api.tripImage;
 
+import com.szymong.trip_planner_api.trip.Trip;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +18,18 @@ public class TripImage {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "trip_id", nullable = false)
-  private Long tripId;
-
   @Column(name = "url", nullable = false)
   private String url;
 
   @Column(name = "public_id", nullable = false)
   private String publicId;
 
-  public TripImage(String publicId, Long tripId, String url) {
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "trip_id", nullable = false)
+  private Trip trip;
+
+  public TripImage(String publicId, String url) {
     this.publicId = publicId;
-    this.tripId = tripId;
     this.url = url;
   }
 }
