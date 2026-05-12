@@ -34,7 +34,7 @@ public class Trip {
 
  // todo: create status enum
   @Column(name = "status")
-  private String status;
+  private TripStatus status;
 
   @Column(name = "estimated_duration")
   private String estimatedDuration;
@@ -46,7 +46,7 @@ public class Trip {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
-  public Trip(Long creatorId, String description, String destination, String estimatedDuration, String origin, String status, String title) {
+  public Trip(Long creatorId, String description, String destination, String estimatedDuration, String origin, TripStatus status, String title) {
     this.creatorId = creatorId;
     this.description = description;
     this.destination = destination;
