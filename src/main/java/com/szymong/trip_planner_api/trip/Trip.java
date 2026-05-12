@@ -1,6 +1,7 @@
 package com.szymong.trip_planner_api.trip;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,9 +33,11 @@ public class Trip {
   @Column(name = "destination")
   private String destination;
 
- // todo: create status enum
+
+  @NotNull
+  @Enumerated(EnumType.STRING)
   @Column(name = "status")
-  private String status;
+  private TripStatus status;
 
   @Column(name = "estimated_duration")
   private String estimatedDuration;
@@ -46,7 +49,7 @@ public class Trip {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
-  public Trip(Long creatorId, String description, String destination, String estimatedDuration, String origin, String status, String title) {
+  public Trip(Long creatorId, String description, String destination, String estimatedDuration, String origin, TripStatus status, String title) {
     this.creatorId = creatorId;
     this.description = description;
     this.destination = destination;
