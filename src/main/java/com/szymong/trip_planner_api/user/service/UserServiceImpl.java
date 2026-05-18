@@ -27,7 +27,8 @@ public class UserServiceImpl implements UserService {
     }
   }
 
-  public User getUserByClerkId(String clerkId){
+
+    public User getUserByClerkId(String clerkId){
     Optional<User> result = userRepository.findByClerkId(clerkId);
 
     if(result.isPresent()){
