@@ -19,19 +19,17 @@ public class UserServiceImpl implements UserService {
   public User getUserById(Long id) {
     Optional<User> result = userRepository.findById(id);
 
-    if(result.isPresent()){
+    if (result.isPresent()) {
       return result.get();
-    }
-    else {
+    } else {
       throw new RuntimeException("id not found");
     }
   }
 
-
-    public User getUserByClerkId(String clerkId){
+  public User getUserByClerkId(String clerkId) {
     Optional<User> result = userRepository.findByClerkId(clerkId);
 
-    if(result.isPresent()){
+    if (result.isPresent()) {
       return result.get();
     } else {
       throw new RuntimeException("clerkId not found" + clerkId);
