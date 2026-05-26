@@ -1,6 +1,7 @@
 package com.szymong.trip_planner_api.tripImage.controller;
 
 import com.szymong.trip_planner_api.tripImage.TripImage;
+import com.szymong.trip_planner_api.tripImage.dto.TripImageResponse;
 import com.szymong.trip_planner_api.tripImage.service.TripImageService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +18,12 @@ public class TripImageController {
   }
 
   @GetMapping("/{id}")
-  public TripImage getTripImageById(@PathVariable Long id) {
+  public TripImageResponse getTripImageById(@PathVariable Long id) {
     return tripImageService.getTripImageById(id);
   }
 
   @GetMapping
-  public List<TripImage> getTripImagesByTripId(@RequestParam Long tripId) {
+  public List<TripImageResponse> getTripImagesByTripId(@RequestParam Long tripId) {
     return tripImageService.getTripImagesByTripId(tripId);
   }
 
