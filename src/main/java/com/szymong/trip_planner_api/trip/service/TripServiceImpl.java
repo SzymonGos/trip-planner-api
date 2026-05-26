@@ -4,10 +4,12 @@ import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TripServiceImpl implements TripService {
 
   private final TripRepository tripRepository;
