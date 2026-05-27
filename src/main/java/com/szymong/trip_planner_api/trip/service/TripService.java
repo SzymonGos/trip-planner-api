@@ -1,20 +1,21 @@
 package com.szymong.trip_planner_api.trip.service;
 
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.TripResponse;
 
 import java.util.List;
 
 public interface TripService {
 
-  Trip getTripById(Long id);
+  TripResponse getTripById(Long id);
 
-  List<Trip> getTripsByCreatorId(Long creatorId);
+  List<TripResponse> getTripsByCreatorId(Long creatorId);
 
-  List<Trip> getAllTrips();
+  List<TripResponse> getAllTrips();
 
-  Trip createTrip(Long userId, Trip trip);
+  TripResponse createTrip(Long userId, Trip trip);
 
-  Trip updateTrip(Long id, Trip updatedTrip);
+  TripResponse updateTrip(Long id, Trip updatedTrip);
 
   void deleteTrip(Long id);
 
