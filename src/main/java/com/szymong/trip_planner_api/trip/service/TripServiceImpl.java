@@ -1,6 +1,8 @@
 package com.szymong.trip_planner_api.trip.service;
 
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.TripResponse;
+import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
@@ -14,51 +16,52 @@ public class TripServiceImpl implements TripService {
 
   private final TripRepository tripRepository;
   private final UserRepository userRepository;
+  private final TripMapper tripMapper;
 
-  public TripServiceImpl(TripRepository triprepository, UserRepository userRepository) {
+  public TripServiceImpl(TripRepository triprepository, UserRepository userRepository, TripMapper tripMapper) {
     this.tripRepository = triprepository;
     this.userRepository = userRepository;
+    this.tripMapper = tripMapper;
   }
 
   @Override
-  public Trip getTripById(Long id) {
+  public TripResponse getTripById(Long id) {
+    Optional<Trip> result = tripRepository.findById(id);
 
-    Optional <Trip> result = tripRepository.findById(id);
-
-    if(result.isPresent()) {
-      return result.get();
-    } else {
+    if (result.isEmpty()) {
       throw new RuntimeException("trip id not found" + id);
     }
+
+    return tripMapper.mapToResponse(result.get());
   }
 
   @Override
-  public List<Trip> getTripsByCreatorId(Long creatorId) {
-    return tripRepository.findByCreatorId(creatorId);
+  public List<TripResponse> getTripsByCreatorId(Long creatorId) {
+    return tripRepository.findByCreatorId(creatorId).stream().map(tripMapper::mapToResponse).toList();
   }
 
   @Override
-  public List<Trip> getAllTrips() {
-    return tripRepository.findAll();
+  public List<TripResponse> getAllTrips() {
+    return tripRepository.findAll().stream().map(tripMapper::mapToResponse).toList();
   }
 
   @Override
-  public Trip createTrip(Long userId, Trip trip) {
+  public TripResponse createTrip(Long userId, Trip trip) {
 
     Optional<User> creator = userRepository.findById(userId);
 
-    if(creator.isEmpty()) {
+    if (creator.isEmpty()) {
       throw new RuntimeException("Creator not found");
     }
 
     trip.setId(null);
     trip.setCreator(creator.get());
 
-    return tripRepository.save(trip);
+    return tripMapper.mapToResponse(tripRepository.save(trip));
   }
 
   @Override
-  public Trip updateTrip(Long id, Trip updatedTrip) {
+  public TripResponse updateTrip(Long id, Trip updatedTrip) {
 
     Optional<Trip> result = tripRepository.findById(id);
 
@@ -73,8 +76,9 @@ public class TripServiceImpl implements TripService {
     existingTrip.setOrigin(updatedTrip.getOrigin());
     existingTrip.setDestination(updatedTrip.getDestination());
     existingTrip.setStatus(updatedTrip.getStatus());
+    existingTrip.setEstimatedDuration(updatedTrip.getEstimatedDuration());
 
-    return tripRepository.save(existingTrip);
+    return tripMapper.mapToResponse(tripRepository.save(existingTrip));
   }
 
   @Override

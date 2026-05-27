@@ -1,6 +1,7 @@
 package com.szymong.trip_planner_api.trip.controller;
 
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.service.TripService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -19,23 +20,23 @@ public class TripController {
   }
 
   @GetMapping
-  public List<Trip> getAllTrips() {
+  public List<TripResponse> getAllTrips() {
     return tripService.getAllTrips();
   }
 
   @GetMapping("/{id}")
-  public Trip getTripById(@PathVariable Long id) {
+  public TripResponse getTripById(@PathVariable Long id) {
     return tripService.getTripById(id);
   }
 
   // todo: replace with DTO, request param used for testing only
   @PostMapping
-  public Trip createTrip(@RequestParam Long userId, @Valid @RequestBody Trip trip) {
+  public TripResponse createTrip(@RequestParam Long userId, @Valid @RequestBody Trip trip) {
     return tripService.createTrip(userId, trip);
   }
 
   @PutMapping("/{id}")
-  public Trip updateTrip(@PathVariable Long id, @Valid @RequestBody Trip trip) {
+  public TripResponse updateTrip(@PathVariable Long id, @Valid @RequestBody Trip trip) {
     return tripService.updateTrip(id, trip);
   }
 
