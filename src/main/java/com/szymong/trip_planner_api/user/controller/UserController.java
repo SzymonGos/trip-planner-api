@@ -1,7 +1,9 @@
 package com.szymong.trip_planner_api.user.controller;
 
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
+import com.szymong.trip_planner_api.user.dto.UserResponse;
 import com.szymong.trip_planner_api.user.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public User getUserById(@PathVariable Long id){
+  public UserResponse getUserById(@PathVariable Long id){
     return userService.getUserById(id);
   }
 
@@ -31,12 +33,12 @@ public class UserController {
   }
 
   @GetMapping("/me/trips")
-  public List<Trip> getCurrentUserTrips(){
+  public List<TripResponse> getCurrentUserTrips(){
     return userService.getCurrentUserTrips();
   }
 
   @GetMapping("/{id}/trips")
-  public List<Trip> getUserTrips(@PathVariable Long id){
+  public List<TripResponse> getUserTrips(@PathVariable Long id){
     return userService.getUserTrips(id);
   }
 }
