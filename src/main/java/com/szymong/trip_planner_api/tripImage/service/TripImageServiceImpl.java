@@ -1,5 +1,6 @@
 package com.szymong.trip_planner_api.tripImage.service;
 
+import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.tripImage.TripImage;
@@ -29,7 +30,7 @@ public class TripImageServiceImpl implements TripImageService {
     Optional<TripImage> result = tripImageRepository.findById(id);
 
     if (result.isEmpty()) {
-      throw new RuntimeException("Trip image not found");
+      throw new ResourceNotFoundException("Trip image not found with id: " + id);
     }
 
     return tripImageMapper.mapToResponse(result.get());
@@ -48,7 +49,7 @@ public class TripImageServiceImpl implements TripImageService {
     Optional<Trip> trip = tripRepository.findById(tripId);
 
     if (trip.isEmpty()) {
-      throw new RuntimeException("Trip not found");
+      throw new ResourceNotFoundException("Trip not found with id: " + tripId);
     }
 
     tripImage.setId(null);
