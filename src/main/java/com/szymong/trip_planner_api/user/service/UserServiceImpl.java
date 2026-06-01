@@ -1,5 +1,6 @@
 package com.szymong.trip_planner_api.user.service;
 
+import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     Optional<User> result = userRepository.findById(id);
 
     if (result.isEmpty()) {
-      throw new RuntimeException("id not found");
+      throw new ResourceNotFoundException("User not found with id: " + id);
     }
 
     return userMapper.mapToResponse(result.get());
@@ -64,12 +65,12 @@ public class UserServiceImpl implements UserService {
     if (result.isPresent()) {
       return result.get();
     } else {
-      throw new RuntimeException("clerkId not found" + clerkId);
+      throw new ResourceNotFoundException("User not found with clerkId: " + clerkId);
     }
   }
 
   private User findUserById(Long id) {
     return userRepository.findById(id)
-                   .orElseThrow(() -> new RuntimeException("User not found"));
+                   .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
   }
 }

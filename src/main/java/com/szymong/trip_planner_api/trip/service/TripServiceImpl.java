@@ -1,5 +1,6 @@
 package com.szymong.trip_planner_api.trip.service;
 
+import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
@@ -29,7 +30,7 @@ public class TripServiceImpl implements TripService {
     Optional<Trip> result = tripRepository.findById(id);
 
     if (result.isEmpty()) {
-      throw new RuntimeException("trip id not found" + id);
+      throw new ResourceNotFoundException("Trip not found whit id: " + id);
     }
 
     return tripMapper.mapToResponse(result.get());
@@ -51,7 +52,7 @@ public class TripServiceImpl implements TripService {
     Optional<User> creator = userRepository.findById(userId);
 
     if (creator.isEmpty()) {
-      throw new RuntimeException("Creator not found");
+      throw new ResourceNotFoundException("Creator not found with id: " + userId);
     }
 
     trip.setId(null);
@@ -66,7 +67,7 @@ public class TripServiceImpl implements TripService {
     Optional<Trip> result = tripRepository.findById(id);
 
     if (result.isEmpty()) {
-      throw new RuntimeException("Trip not found");
+      throw new ResourceNotFoundException("Trip not found with id: " + id);
     }
 
     Trip existingTrip = result.get();
