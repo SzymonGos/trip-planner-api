@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleValidationException(HttpServletRequest request){
+  public ResponseEntity<ErrorResponse> handleValidationException(HttpServletRequest request) {
 
     ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Validation failed", request.getRequestURI(), LocalDateTime.now());
 
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErrorResponse> handleException(HttpServletRequest request){
+  public ResponseEntity<ErrorResponse> handleException(HttpServletRequest request) {
 
     ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error", request.getRequestURI(), LocalDateTime.now());
 

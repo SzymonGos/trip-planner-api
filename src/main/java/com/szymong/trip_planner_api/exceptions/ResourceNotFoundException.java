@@ -1,7 +1,7 @@
 package com.szymong.trip_planner_api.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException{
-  public ResourceNotFoundException(String message){
+public class ResourceNotFoundException extends RuntimeException {
+  public ResourceNotFoundException(String message) {
     super(message);
   }
 }

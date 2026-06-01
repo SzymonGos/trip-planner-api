@@ -30,7 +30,7 @@ public class TripServiceImpl implements TripService {
     Optional<Trip> result = tripRepository.findById(id);
 
     if (result.isEmpty()) {
-      throw new ResourceNotFoundException("Trip not found whit id: " + id);
+      throw new ResourceNotFoundException("Trip not found with id: " + id);
     }
 
     return tripMapper.mapToResponse(result.get());
