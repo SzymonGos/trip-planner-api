@@ -1,0 +1,7 @@
+ALTER TABLE users
+    ADD COLUMN deleted_at TIMESTAMP,
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    ADD COLUMN google_maps_route_count INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN google_maps_route_reset_date TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '1 month'),
+    ADD COLUMN ai_chat_usage_count INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN ai_chat_usage_reset_date TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL '1 month');
