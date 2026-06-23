@@ -60,7 +60,7 @@ public class User {
   @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
   private List<Trip> trips = new ArrayList<>();
 
-  public User(String clerkId, LocalDateTime createdAt, String email, String profileImageUrl, String username ) {
+  public User(String clerkId, LocalDateTime createdAt, String email, String profileImageUrl, String username) {
     this.clerkId = clerkId;
     this.createdAt = createdAt;
     this.email = email;
