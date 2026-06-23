@@ -35,6 +35,24 @@ public class User {
   @Column(name = "profile_image_url")
   private String profileImageUrl;
 
+  @Column(name = "deleted_at")
+  private LocalDateTime deletedAt;
+
+  @Column(name = "is_deleted", nullable = false)
+  private Boolean isDeleted;
+
+  @Column(name = "google_maps_route_count", nullable = false)
+  private Integer googleMapsRouteCount = 0;
+
+  @Column(name = "google_maps_route_reset_date", nullable = false)
+  private LocalDateTime googleMapsRouteResetDate = LocalDateTime.now().plusMonths(1);
+
+  @Column(name = "ai_chat_usage_count", nullable = false)
+  private Integer aiChatUsageCount = 0;
+
+  @Column(name = "ai_chat_usage_reset_date", nullable = false)
+  private LocalDateTime aiChatUsageResetDate = LocalDateTime.now().plusMonths(1);
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
