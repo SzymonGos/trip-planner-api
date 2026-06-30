@@ -5,6 +5,8 @@ import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.user.User;
+import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
+import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
 import com.szymong.trip_planner_api.user.mapper.UserMapper;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
@@ -61,12 +63,22 @@ public class UserServiceImpl implements UserService {
 
   public User getUserByClerkId(String clerkId) {
     Optional<User> result = userRepository.findByClerkId(clerkId);
-
     if (result.isPresent()) {
       return result.get();
     } else {
       throw new ResourceNotFoundException("User not found with clerkId: " + clerkId);
     }
+  }
+  @Override
+  public CreateUserResponse createUser(CreateUserRequest request) {
+    User newUser = new User();
+
+    newUser.setClerkId(request.getClerkId());
+    newUser.setUsername(request.getUsername());
+    newUser.setEmail(request.getEmail());
+
+
+    return userMapper.mapToCreateUserResponse(userRepository.save(newUser));
   }
 
   private User findUserById(Long id) {
