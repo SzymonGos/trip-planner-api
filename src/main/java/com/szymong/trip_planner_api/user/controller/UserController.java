@@ -1,14 +1,12 @@
 package com.szymong.trip_planner_api.user.controller;
 
-import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
+import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
+import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
 import com.szymong.trip_planner_api.user.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,4 +39,7 @@ public class UserController {
   public List<TripResponse> getUserTrips(@PathVariable Long id){
     return userService.getUserTrips(id);
   }
+
+  @PostMapping
+  public CreateUserResponse createUser(@RequestBody CreateUserRequest request) { return userService.createUser(request); }
 }

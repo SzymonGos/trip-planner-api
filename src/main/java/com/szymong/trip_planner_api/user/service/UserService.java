@@ -1,8 +1,9 @@
 package com.szymong.trip_planner_api.user.service;
 
-import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
+import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
+import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface UserService {
   List<TripResponse> getCurrentUserTrips();
 
   User getUserByClerkId(String clerkId);
+
+  CreateUserResponse createUser(CreateUserRequest user);
 }

@@ -39,7 +39,7 @@ public class User {
   private LocalDateTime deletedAt;
 
   @Column(name = "is_deleted", nullable = false)
-  private Boolean isDeleted;
+  private Boolean isDeleted = false;
 
   @Column(name = "google_maps_route_count", nullable = false)
   private Integer googleMapsRouteCount = 0;

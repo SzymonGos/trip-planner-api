@@ -1,6 +1,7 @@
 package com.szymong.trip_planner_api.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,6 +35,13 @@ public class GlobalExceptionHandler {
     ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error", request.getRequestURI(), LocalDateTime.now());
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+  }
 
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(HttpServletRequest request){
+
+    ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value(), "Resource already exists", request.getRequestURI(), LocalDateTime.now());
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
   }
 }
