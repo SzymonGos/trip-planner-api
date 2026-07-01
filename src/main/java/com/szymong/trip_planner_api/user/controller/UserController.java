@@ -1,6 +1,5 @@
 package com.szymong.trip_planner_api.user.controller;
 
-import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
