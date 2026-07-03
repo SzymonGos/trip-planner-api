@@ -71,6 +71,13 @@ public class UserServiceImpl implements UserService {
   }
   @Override
   public CreateUserResponse createUser(CreateUserRequest request) {
+
+    Optional<User> existingUser = userRepository.findByClerkId(request.getClerkId());
+
+    if (existingUser.isPresent()) {
+      return userMapper.mapToCreateUserResponse(existingUser.get());
+    }
+
     User newUser = new User();
 
     newUser.setClerkId(request.getClerkId());
