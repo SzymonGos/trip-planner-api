@@ -1,10 +1,11 @@
 package com.szymong.trip_planner_api.user.controller;
 
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
-import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
 import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
+import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
+import com.szymong.trip_planner_api.user.mapper.UserMapper;
 import com.szymong.trip_planner_api.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class UserController {
 
   public final UserService userService;
 
-  public UserController(UserService userService) {
+  public UserController(UserService userService, UserMapper userMapper) {
     this.userService = userService;
   }
 
@@ -26,7 +27,7 @@ public class UserController {
   }
 
   @GetMapping("/me")
-  public User getCurrentUser(){
+  public CurrentUserResponse getCurrentUser(){
     return userService.getCurrentUser();
   }
 

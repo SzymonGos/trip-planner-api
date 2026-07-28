@@ -4,6 +4,7 @@ import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
 import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
+import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UserService {
 
   List<TripResponse> getUserTrips(Long id);
 
-  User getCurrentUser();
+  CurrentUserResponse getCurrentUser();
 
   List<TripResponse> getCurrentUserTrips();
 

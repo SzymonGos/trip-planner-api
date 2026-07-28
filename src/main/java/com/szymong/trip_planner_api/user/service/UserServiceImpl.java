@@ -7,9 +7,12 @@ import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
 import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
+import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
 import com.szymong.trip_planner_api.user.mapper.UserMapper;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,15 +51,24 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getCurrentUser() {
-    // todo: after clerk integration use getUserByClerkIds
+  public CurrentUserResponse getCurrentUser() {
+    Authentication authentication = SecurityContextHolder
+                                            .getContext()
+                                            .getAuthentication();
 
-    throw new UnsupportedOperationException("Current user requires JWT/Clerk integration");
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new IllegalStateException("Authenticated user is required");
+    }
+
+    String clerkId = authentication.getName();
+    User user = getUserByClerkId(clerkId);
+
+    return new CurrentUserResponse(user.getId());
   }
 
   @Override
   public List<TripResponse> getCurrentUserTrips() {
-    User currentUser = getCurrentUser();
+    CurrentUserResponse currentUser = getCurrentUser();
 
     return tripRepository.findByCreatorId(currentUser.getId()).stream().map(tripMapper::mapToResponse).toList();
   }
