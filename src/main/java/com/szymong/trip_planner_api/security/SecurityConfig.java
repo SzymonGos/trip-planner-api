@@ -24,7 +24,7 @@ public class SecurityConfig {
 
     http.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults()).authorizeHttpRequests(auth -> auth.requestMatchers(
             HttpMethod.POST, "/api/users"
-    ).permitAll().anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+    ).permitAll().requestMatchers(HttpMethod.GET,  "/api/users/username/*").permitAll().anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
     return http.build();
   }
 

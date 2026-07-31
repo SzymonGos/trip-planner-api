@@ -5,7 +5,6 @@ import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
 import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
 import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
-import com.szymong.trip_planner_api.user.mapper.UserMapper;
 import com.szymong.trip_planner_api.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ public class UserController {
 
   public final UserService userService;
 
-  public UserController(UserService userService, UserMapper userMapper) {
+  public UserController(UserService userService) {
     this.userService = userService;
   }
 
@@ -29,6 +28,11 @@ public class UserController {
   @GetMapping("/me")
   public CurrentUserResponse getCurrentUser(){
     return userService.getCurrentUser();
+  }
+
+  @GetMapping("/username/{username}")
+  public UserResponse getUserByUsername(@PathVariable String username){
+    return userService.getUserByUsername(username);
   }
 
   @GetMapping("/me/trips")

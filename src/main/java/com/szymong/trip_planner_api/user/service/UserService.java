@@ -6,6 +6,7 @@ import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
 import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
 import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
 import com.szymong.trip_planner_api.user.dto.UserResponse;
+import com.szymong.trip_planner_api.user.repository.UserRepository;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface UserService {
   User getUserByClerkId(String clerkId);
 
   CreateUserResponse createUser(CreateUserRequest user);
+
+  UserResponse getUserByUsername(String username);
 }
