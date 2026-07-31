@@ -44,6 +44,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public UserResponse getUserByUsername(String username) {
+    Optional<User> result = userRepository.findByUsername(username);
+
+    if (result.isEmpty()) {
+      throw new ResourceNotFoundException("User not found with username: " + username);
+    }
+
+    return userMapper.mapToResponse(result.get());
+  }
+
+  @Override
   public List<TripResponse> getUserTrips(Long id) {
     User user = findUserById(id);
 
