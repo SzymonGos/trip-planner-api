@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,8 @@ public class UserResponse {
   private String username;
 
   private String profileImageUrl;
+
+  private LocalDateTime createdAt;
 
   private List<TripResponse> userTrips;
 }

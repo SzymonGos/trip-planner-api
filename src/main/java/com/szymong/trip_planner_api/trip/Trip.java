@@ -45,6 +45,9 @@ public class Trip {
   @Column(name = "estimated_duration")
   private String estimatedDuration;
 
+  @Column(name = "distance", nullable = false)
+  private Long distance;
+
   @CreationTimestamp
   @Column(name = "created_at")
   private LocalDateTime createdAt;
