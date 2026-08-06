@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     String clerkId = authentication.getName();
     User user = getUserByClerkId(clerkId);
 
-    return new CurrentUserResponse(user.getId());
+    return new CurrentUserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getProfileImagePublicId());
   }
 
   @Override

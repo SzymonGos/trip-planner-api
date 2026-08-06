@@ -32,8 +32,8 @@ public class User {
   @Column(name = "username", nullable = false, unique = true)
   private String username;
 
-  @Column(name = "profile_image_url")
-  private String profileImageUrl;
+  @Column(name = "profile_image_public_id")
+  private String profileImagePublicId;
 
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
@@ -60,11 +60,11 @@ public class User {
   @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
   private List<Trip> trips = new ArrayList<>();
 
-  public User(String clerkId, LocalDateTime createdAt, String email, String profileImageUrl, String username) {
+  public User(String clerkId, LocalDateTime createdAt, String email, String profileImagePublicId, String username) {
     this.clerkId = clerkId;
     this.createdAt = createdAt;
     this.email = email;
-    this.profileImageUrl = profileImageUrl;
+    this.profileImagePublicId = profileImagePublicId;
     this.username = username;
   }
 
