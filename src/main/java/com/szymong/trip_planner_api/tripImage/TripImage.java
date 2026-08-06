@@ -18,9 +18,6 @@ public class TripImage {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "url", nullable = false)
-  private String url;
-
   @Column(name = "public_id", nullable = false)
   private String publicId;
 
@@ -28,8 +25,7 @@ public class TripImage {
   @JoinColumn(name = "trip_id", nullable = false)
   private Trip trip;
 
-  public TripImage(String publicId, String url) {
+  public TripImage(String publicId) {
     this.publicId = publicId;
-    this.url = url;
   }
 }

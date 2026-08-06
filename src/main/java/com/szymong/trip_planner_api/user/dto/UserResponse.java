@@ -16,7 +16,7 @@ public class UserResponse {
 
   private String username;
 
-  private String profileImageUrl;
+  private String profileImagePublicId;
 
   private LocalDateTime createdAt;
 
