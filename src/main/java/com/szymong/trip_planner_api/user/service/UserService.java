@@ -2,10 +2,7 @@ package com.szymong.trip_planner_api.user.service;
 
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
-import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
-import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
-import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
-import com.szymong.trip_planner_api.user.dto.UserResponse;
+import com.szymong.trip_planner_api.user.dto.*;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
 
 import java.util.List;
@@ -24,4 +21,6 @@ public interface UserService {
   CreateUserResponse createUser(CreateUserRequest user);
 
   UserResponse getUserByUsername(String username);
+
+  UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest user);
 }

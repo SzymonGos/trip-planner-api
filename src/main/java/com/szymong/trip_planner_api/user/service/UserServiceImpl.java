@@ -5,10 +5,7 @@ import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.user.User;
-import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
-import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
-import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
-import com.szymong.trip_planner_api.user.dto.UserResponse;
+import com.szymong.trip_planner_api.user.dto.*;
 import com.szymong.trip_planner_api.user.mapper.UserMapper;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
@@ -63,16 +60,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public CurrentUserResponse getCurrentUser() {
-    Authentication authentication = SecurityContextHolder
-                                            .getContext()
-                                            .getAuthentication();
-
-    if (authentication == null || !authentication.isAuthenticated()) {
-      throw new IllegalStateException("Authenticated user is required");
-    }
-
-    String clerkId = authentication.getName();
-    User user = getUserByClerkId(clerkId);
+    User user = getAuthenticatedUser();
 
     return new CurrentUserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getProfileImagePublicId());
   }
@@ -111,8 +99,34 @@ public class UserServiceImpl implements UserService {
     return userMapper.mapToCreateUserResponse(userRepository.save(newUser));
   }
 
+  @Override
+  public UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest request) {
+    User user = getAuthenticatedUser();
+
+    user.setUsername(request.getUsername());
+    user.setProfileImagePublicId(request.getProfileImagePublicId());
+    User updatedUser = userRepository.save(user);
+
+    return userMapper.mapToUpdateCurrentUserResponse(updatedUser);
+  }
+
   private User findUserById(Long id) {
     return userRepository.findById(id)
                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
   }
+
+  private User getAuthenticatedUser(){
+    Authentication authentication = SecurityContextHolder
+                                            .getContext()
+                                            .getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+      throw new IllegalStateException("Authenticated user is required");
+    }
+
+    String clerkId = authentication.getName();
+
+    return getUserByClerkId(clerkId);
+  }
+
 }
