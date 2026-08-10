@@ -1,10 +1,7 @@
 package com.szymong.trip_planner_api.user.controller;
 
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
-import com.szymong.trip_planner_api.user.dto.CreateUserRequest;
-import com.szymong.trip_planner_api.user.dto.CreateUserResponse;
-import com.szymong.trip_planner_api.user.dto.CurrentUserResponse;
-import com.szymong.trip_planner_api.user.dto.UserResponse;
+import com.szymong.trip_planner_api.user.dto.*;
 import com.szymong.trip_planner_api.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,4 +44,9 @@ public class UserController {
 
   @PostMapping
   public CreateUserResponse createUser(@RequestBody CreateUserRequest request) { return userService.createUser(request); }
+
+  @PatchMapping("/me")
+  public UpdateCurrentUserResponse updateUser(@RequestBody UpdateCurrentUserRequest request){
+    return userService.updateUser(request);
+  }
 }
