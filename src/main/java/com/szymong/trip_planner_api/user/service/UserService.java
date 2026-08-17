@@ -4,6 +4,7 @@ import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.dto.*;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public interface UserService {
 
   UserResponse getUserByUsername(String username);
 
-  UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest user);
+  UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest user, MultipartFile profileImage);
 }

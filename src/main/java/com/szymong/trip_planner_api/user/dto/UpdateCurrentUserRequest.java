@@ -8,9 +8,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UpdateCurrentUserRequest {
-  private Long id;
-
   private String username;
-
-  private String profileImagePublicId;
 }

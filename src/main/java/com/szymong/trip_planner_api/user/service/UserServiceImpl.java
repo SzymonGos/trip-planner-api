@@ -1,5 +1,7 @@
 package com.szymong.trip_planner_api.user.service;
 
+import com.szymong.trip_planner_api.cloudinary.service.CloudinaryService;
+import com.szymong.trip_planner_api.cloudinary.service.CloudinaryServiceImpl;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
@@ -11,6 +13,7 @@ import com.szymong.trip_planner_api.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +23,14 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final TripRepository tripRepository;
+  private final CloudinaryService cloudinaryService;
   private final UserMapper userMapper;
   private final TripMapper tripMapper;
 
-  public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, UserMapper userMapper, TripMapper tripMapper) {
+  public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, CloudinaryService cloudinaryService, UserMapper userMapper, TripMapper tripMapper) {
     this.userRepository = userRepository;
     this.tripRepository = tripRepository;
+    this.cloudinaryService = cloudinaryService;
     this.userMapper = userMapper;
     this.tripMapper = tripMapper;
   }
@@ -100,11 +105,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest request) {
+  public UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest request, MultipartFile profileImage) {
     User user = getAuthenticatedUser();
 
     user.setUsername(request.getUsername());
-    user.setProfileImagePublicId(request.getProfileImagePublicId());
+    if(profileImage != null && !profileImage.isEmpty()){
+      String publicId = cloudinaryService.uploadProfileImage(profileImage);
+
+      user.setProfileImagePublicId(publicId);
+    }
+
     User updatedUser = userRepository.save(user);
 
     return userMapper.mapToUpdateCurrentUserResponse(updatedUser);
