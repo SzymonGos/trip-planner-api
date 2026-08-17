@@ -3,8 +3,11 @@ package com.szymong.trip_planner_api.user.controller;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.user.dto.*;
 import com.szymong.trip_planner_api.user.service.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -45,8 +48,8 @@ public class UserController {
   @PostMapping
   public CreateUserResponse createUser(@RequestBody CreateUserRequest request) { return userService.createUser(request); }
 
-  @PatchMapping("/me")
-  public UpdateCurrentUserResponse updateUser(@RequestBody UpdateCurrentUserRequest request){
-    return userService.updateUser(request);
+  @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public UpdateCurrentUserResponse updateUser(@RequestPart("request") UpdateCurrentUserRequest request, @RequestPart(value = "profileImage", required = false) MultipartFile profileImage){
+    return userService.updateUser(request, profileImage);
   }
 }
