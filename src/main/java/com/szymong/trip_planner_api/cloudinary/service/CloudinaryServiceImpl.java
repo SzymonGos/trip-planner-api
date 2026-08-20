@@ -30,7 +30,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
   private String uploadImage(MultipartFile file,CloudinaryFolder folder ) {
     try {
-      Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", folder.getPath()));
+      Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("asset_folder", folder.getPath()));
 
       return uploadResult.get("public_id").toString();
 
