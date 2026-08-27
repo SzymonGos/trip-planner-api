@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
   }
 
-  private User getAuthenticatedUser(){
+  public User getAuthenticatedUser(){
     Authentication authentication = SecurityContextHolder
                                             .getContext()
                                             .getAuthentication();

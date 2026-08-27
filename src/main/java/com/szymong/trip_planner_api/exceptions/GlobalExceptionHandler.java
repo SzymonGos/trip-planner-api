@@ -44,4 +44,12 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
   }
+
+  @ExceptionHandler(GoogleMapsUsageLimitExceededException.class)
+  public ResponseEntity<ErrorResponse> handleGoogleMapsUsageLimitExceededException(HttpServletRequest request){
+
+    ErrorResponse error = new ErrorResponse(HttpStatus.TOO_MANY_REQUESTS.value(), "Google Maps route limit exceeded", request.getRequestURI(), LocalDateTime.now());
+
+    return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(error);
+  }
 }

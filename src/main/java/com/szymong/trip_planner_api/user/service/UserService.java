@@ -24,4 +24,6 @@ public interface UserService {
   UserResponse getUserByUsername(String username);
 
   UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest user, MultipartFile profileImage);
+
+  User getAuthenticatedUser();
 }
