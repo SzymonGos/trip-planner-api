@@ -2,12 +2,16 @@ package com.szymong.trip_planner_api.trip.service;
 
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
+import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
+import com.szymong.trip_planner_api.usage.service.UsageService;
 import com.szymong.trip_planner_api.user.User;
-import com.szymong.trip_planner_api.user.repository.UserRepository;
+import com.szymong.trip_planner_api.user.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,13 +20,15 @@ import java.util.Optional;
 public class TripServiceImpl implements TripService {
 
   private final TripRepository tripRepository;
-  private final UserRepository userRepository;
   private final TripMapper tripMapper;
+  private final UserService userService;
+  private final UsageService usageService;
 
-  public TripServiceImpl(TripRepository triprepository, UserRepository userRepository, TripMapper tripMapper) {
+  public TripServiceImpl(TripRepository triprepository, TripMapper tripMapper, UserService userService, UsageService usageService) {
     this.tripRepository = triprepository;
-    this.userRepository = userRepository;
     this.tripMapper = tripMapper;
+    this.userService = userService;
+    this.usageService = usageService;
   }
 
   @Override
@@ -47,18 +53,24 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
-  public TripResponse createTrip(Long userId, Trip trip) {
+  @Transactional
+  public CreateTripResponse createTrip(CreateTripRequest request) {
 
-    Optional<User> creator = userRepository.findById(userId);
+    User user = userService.getAuthenticatedUser();
+    usageService.incrementGoogleMapsUsage(user);
 
-    if (creator.isEmpty()) {
-      throw new ResourceNotFoundException("Creator not found with id: " + userId);
-    }
+    Trip newTrip = new Trip();
 
-    trip.setId(null);
-    trip.setCreator(creator.get());
+    newTrip.setId(null);
+    newTrip.setCreator(user);
+    newTrip.setTitle(request.getTitle());
+    newTrip.setDescription(request.getDescription());
+    newTrip.setOrigin(request.getOrigin());
+    newTrip.setDestination(request.getDestination());
+    newTrip.setStatus(request.getStatus());
+    newTrip.setCreatedAt(request.getCreatedAt());
 
-    return tripMapper.mapToResponse(tripRepository.save(trip));
+    return tripMapper.mapToCreateResponse(tripRepository.save(newTrip));
   }
 
   @Override

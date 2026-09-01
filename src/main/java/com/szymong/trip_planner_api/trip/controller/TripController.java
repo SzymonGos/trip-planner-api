@@ -1,6 +1,8 @@
 package com.szymong.trip_planner_api.trip.controller;
 
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
+import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.service.TripService;
 import jakarta.validation.Valid;
@@ -29,10 +31,9 @@ public class TripController {
     return tripService.getTripById(id);
   }
 
-  // todo: replace with DTO, request param used for testing only
   @PostMapping
-  public TripResponse createTrip(@RequestParam Long userId, @Valid @RequestBody Trip trip) {
-    return tripService.createTrip(userId, trip);
+  public CreateTripResponse createTrip(@RequestBody CreateTripRequest request) {
+    return tripService.createTrip(request);
   }
 
   @PutMapping("/{id}")
