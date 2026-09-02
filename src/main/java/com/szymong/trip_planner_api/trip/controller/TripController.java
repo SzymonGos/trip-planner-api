@@ -6,7 +6,6 @@ import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.service.TripService;
 import jakarta.validation.Valid;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
