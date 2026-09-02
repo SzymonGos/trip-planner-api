@@ -27,14 +27,12 @@ public class UsageServiceImpl implements UsageService {
     return new UsageResponse(user.getGoogleMapsRouteCount(),usageProperties.getGoogleMaps().getMaxLimit(), user.getGoogleMapsRouteResetDate());
   }
 
-  public User incrementGoogleMapsUsage() {
-    User user = userService.getAuthenticatedUser();
-
+  public void incrementGoogleMapsUsage(User user) {
     int maxLimit = usageProperties.getGoogleMaps().getMaxLimit();
 
     if(user.getGoogleMapsRouteCount() < maxLimit){
       user.setGoogleMapsRouteCount(user.getGoogleMapsRouteCount() + 1);
-      return userRepository.save(user);
+      userRepository.save(user);
     } else {
       throw new GoogleMapsUsageLimitExceededException("User reached max limit of Google Maps Routes: " + maxLimit);
     }

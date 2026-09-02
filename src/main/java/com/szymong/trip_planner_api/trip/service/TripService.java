@@ -1,6 +1,8 @@
 package com.szymong.trip_planner_api.trip.service;
 
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
+import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 
 import java.util.List;
@@ -13,7 +15,7 @@ public interface TripService {
 
   List<TripResponse> getAllTrips();
 
-  TripResponse createTrip(Long userId, Trip trip);
+  CreateTripResponse createTrip(CreateTripRequest request);
 
   TripResponse updateTrip(Long id, Trip updatedTrip);
 
