@@ -13,7 +13,6 @@ import com.szymong.trip_planner_api.tripImage.repository.TripImageRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
