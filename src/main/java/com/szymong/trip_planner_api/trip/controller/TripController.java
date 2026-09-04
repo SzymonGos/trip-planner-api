@@ -6,7 +6,9 @@ import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.service.TripService;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,9 +32,9 @@ public class TripController {
     return tripService.getTripById(id);
   }
 
-  @PostMapping
-  public CreateTripResponse createTrip(@RequestBody CreateTripRequest request) {
-    return tripService.createTrip(request);
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public CreateTripResponse createTrip(@RequestPart CreateTripRequest request,  @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+    return tripService.createTrip(request, images);
   }
 
   @PutMapping("/{id}")

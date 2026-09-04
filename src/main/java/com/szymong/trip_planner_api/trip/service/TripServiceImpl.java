@@ -7,11 +7,13 @@ import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
+import com.szymong.trip_planner_api.tripImage.service.TripImageService;
 import com.szymong.trip_planner_api.usage.service.UsageService;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +25,14 @@ public class TripServiceImpl implements TripService {
   private final TripMapper tripMapper;
   private final UserService userService;
   private final UsageService usageService;
+  private final TripImageService tripImageService;
 
-  public TripServiceImpl(TripRepository triprepository, TripMapper tripMapper, UserService userService, UsageService usageService) {
+  public TripServiceImpl(TripRepository triprepository, TripMapper tripMapper, UserService userService, UsageService usageService, TripImageService tripImageService) {
     this.tripRepository = triprepository;
     this.tripMapper = tripMapper;
     this.userService = userService;
     this.usageService = usageService;
+    this.tripImageService = tripImageService;
   }
 
   @Override
@@ -54,23 +58,25 @@ public class TripServiceImpl implements TripService {
 
   @Override
   @Transactional
-  public CreateTripResponse createTrip(CreateTripRequest request) {
+  public CreateTripResponse createTrip(CreateTripRequest request, List<MultipartFile> images) {
 
     User user = userService.getAuthenticatedUser();
     usageService.incrementGoogleMapsUsage(user);
 
     Trip newTrip = new Trip();
 
-    newTrip.setId(null);
     newTrip.setCreator(user);
     newTrip.setTitle(request.getTitle());
     newTrip.setDescription(request.getDescription());
     newTrip.setOrigin(request.getOrigin());
     newTrip.setDestination(request.getDestination());
     newTrip.setStatus(request.getStatus());
-    newTrip.setCreatedAt(request.getCreatedAt());
 
-    return tripMapper.mapToCreateResponse(tripRepository.save(newTrip));
+    Trip savedTrip = tripRepository.save(newTrip);
+
+    tripImageService.addTripImages(savedTrip, images);
+
+    return tripMapper.mapToCreateResponse(savedTrip);
   }
 
   @Override
