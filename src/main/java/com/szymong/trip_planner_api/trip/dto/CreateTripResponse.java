@@ -1,8 +1,10 @@
 package com.szymong.trip_planner_api.trip.dto;
 
 import com.szymong.trip_planner_api.trip.TripStatus;
+import com.szymong.trip_planner_api.tripImage.TripImage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CreateTripResponse {
   private String title;
@@ -16,4 +18,6 @@ public class CreateTripResponse {
   private TripStatus status;
 
   private LocalDateTime createdAt;
+
+  private List<TripImage> tripImages;
 }
