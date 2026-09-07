@@ -2,6 +2,8 @@ package com.szymong.trip_planner_api.tripImage.service;
 
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryService;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
+import com.szymong.trip_planner_api.image.config.ImageValidationProperties;
+import com.szymong.trip_planner_api.image.validation.ImageFileValidator;
 import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.TripStatus;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
@@ -24,13 +26,15 @@ public class TripImageServiceImpl implements TripImageService {
   private final TripImageMapper tripImageMapper;
   private final TripImageProperties tripImageProperties;
   private final CloudinaryService cloudinaryService;
+  private final ImageFileValidator imageFileValidator;
 
-  public TripImageServiceImpl(TripImageRepository tripImageRepository, TripRepository tripRepository, TripImageMapper tripImageMapper, TripImageProperties tripImageProperties, CloudinaryService cloudinaryService) {
+  public TripImageServiceImpl(TripImageRepository tripImageRepository, TripRepository tripRepository, TripImageMapper tripImageMapper, TripImageProperties tripImageProperties, CloudinaryService cloudinaryService, ImageValidationProperties imageValidationProperties, ImageFileValidator imageFileValidator) {
     this.tripImageRepository = tripImageRepository;
     this.tripRepository = tripRepository;
     this.tripImageMapper = tripImageMapper;
     this.tripImageProperties = tripImageProperties;
     this.cloudinaryService = cloudinaryService;
+    this.imageFileValidator = imageFileValidator;
   }
 
   @Override
@@ -83,8 +87,11 @@ public class TripImageServiceImpl implements TripImageService {
       // todo: change the runntime error - temp for now
       throw new RuntimeException("Limit is reached");
     }
-    // verify image max weight
-    // verify image format
+
+    for(MultipartFile image: images){
+      imageFileValidator.validateImage(image);
+    }
+
     for(MultipartFile image: images){
       String publicId = cloudinaryService.uploadTripImage(image);
 

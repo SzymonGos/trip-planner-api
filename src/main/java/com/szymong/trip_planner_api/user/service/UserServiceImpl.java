@@ -3,6 +3,7 @@ package com.szymong.trip_planner_api.user.service;
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryService;
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryServiceImpl;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
+import com.szymong.trip_planner_api.image.validation.ImageFileValidator;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
@@ -26,13 +27,15 @@ public class UserServiceImpl implements UserService {
   private final CloudinaryService cloudinaryService;
   private final UserMapper userMapper;
   private final TripMapper tripMapper;
+  private final ImageFileValidator imageFileValidator;
 
-  public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, CloudinaryService cloudinaryService, UserMapper userMapper, TripMapper tripMapper) {
+  public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, CloudinaryService cloudinaryService, UserMapper userMapper, TripMapper tripMapper, ImageFileValidator imageFileValidator) {
     this.userRepository = userRepository;
     this.tripRepository = tripRepository;
     this.cloudinaryService = cloudinaryService;
     this.userMapper = userMapper;
     this.tripMapper = tripMapper;
+    this.imageFileValidator = imageFileValidator;
   }
 
   public UserResponse getUserById(Long id) {
@@ -109,7 +112,9 @@ public class UserServiceImpl implements UserService {
     User user = getAuthenticatedUser();
 
     user.setUsername(request.getUsername());
-    if(profileImage != null && !profileImage.isEmpty()){
+    if(profileImage != null){
+      imageFileValidator.validateImage(profileImage);
+
       String publicId = cloudinaryService.uploadProfileImage(profileImage);
 
       user.setProfileImagePublicId(publicId);
