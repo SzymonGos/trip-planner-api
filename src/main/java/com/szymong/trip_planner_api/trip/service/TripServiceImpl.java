@@ -71,6 +71,8 @@ public class TripServiceImpl implements TripService {
     newTrip.setOrigin(request.getOrigin());
     newTrip.setDestination(request.getDestination());
     newTrip.setStatus(request.getStatus());
+    newTrip.setEstimatedDurationSeconds(request.getEstimatedDurationSeconds());
+    newTrip.setDistanceMeters(request.getDistanceMeters());
 
     Trip savedTrip = tripRepository.save(newTrip);
 
@@ -95,7 +97,6 @@ public class TripServiceImpl implements TripService {
     existingTrip.setOrigin(updatedTrip.getOrigin());
     existingTrip.setDestination(updatedTrip.getDestination());
     existingTrip.setStatus(updatedTrip.getStatus());
-    existingTrip.setEstimatedDuration(updatedTrip.getEstimatedDuration());
 
     return tripMapper.mapToResponse(tripRepository.save(existingTrip));
   }

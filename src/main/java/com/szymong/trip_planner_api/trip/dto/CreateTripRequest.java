@@ -22,6 +22,10 @@ public class CreateTripRequest {
 
   private String destination;
 
+  private Long distanceMeters;
+
+  private Long estimatedDurationSeconds;
+
   private TripStatus status;
 
   private LocalDateTime createdAt;
