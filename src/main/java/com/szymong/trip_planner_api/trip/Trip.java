@@ -4,6 +4,7 @@ import com.szymong.trip_planner_api.tripImage.TripImage;
 import com.szymong.trip_planner_api.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,11 +43,15 @@ public class Trip {
   @Column(name = "status", nullable = false)
   private TripStatus status;
 
-  @Column(name = "estimated_duration")
-  private String estimatedDuration;
+  @NotNull
+  @Positive
+  @Column(name = "estimated_duration_seconds", nullable = false)
+  private Long estimatedDurationSeconds;
 
-  @Column(name = "distance", nullable = false)
-  private Long distance;
+  @NotNull
+  @Positive
+  @Column(name = "distance_meters", nullable = false)
+  private Long distanceMeters;
 
   @CreationTimestamp
   @Column(name = "created_at")
@@ -59,10 +64,11 @@ public class Trip {
   @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TripImage> tripImages = new ArrayList<>();
 
-  public Trip(String description, String destination, String estimatedDuration, String origin, TripStatus status, String title) {
+  public Trip(String description, String destination, Long estimatedDurationSeconds, Long distanceMeters, String origin, TripStatus status, String title) {
     this.description = description;
     this.destination = destination;
-    this.estimatedDuration = estimatedDuration;
+    this.estimatedDurationSeconds = estimatedDurationSeconds;
+    this.distanceMeters = distanceMeters;
     this.origin = origin;
     this.status = status;
     this.title = title;
