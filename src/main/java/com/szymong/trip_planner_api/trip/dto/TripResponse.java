@@ -18,10 +18,6 @@ public class TripResponse {
 
   private String description;
 
-  private String origin;
-
-  private String destination;
-
   private Long distanceMeters;
 
   private Long estimatedDurationSeconds;
@@ -30,7 +26,7 @@ public class TripResponse {
 
   private LocalDateTime createdAt;
 
-  private Long creatorId;
+  private TripCreatorResponse creator;
 
   private List<TripImageResponse> tripImages;
 

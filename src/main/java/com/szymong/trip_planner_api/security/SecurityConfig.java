@@ -22,9 +22,11 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults()).authorizeHttpRequests(auth -> auth.requestMatchers(
-            HttpMethod.POST, "/api/users"
-    ).permitAll().requestMatchers(HttpMethod.GET,  "/api/users/username/*").permitAll().anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+    http.csrf(AbstractHttpConfigurer::disable).cors(Customizer.withDefaults()).authorizeHttpRequests(auth -> auth
+        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/users/username/*").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/trips").permitAll()
+        .anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
     return http.build();
   }
 
@@ -56,5 +58,5 @@ public class SecurityConfig {
     source.registerCorsConfiguration("/**", configuration);
 
     return source;
-    }
+  }
 }
