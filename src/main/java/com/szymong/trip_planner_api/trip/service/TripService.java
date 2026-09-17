@@ -4,6 +4,7 @@ import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
 import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
+import com.szymong.trip_planner_api.trip.dto.UpdateTripRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface TripService {
 
   CreateTripResponse createTrip(CreateTripRequest request, List<MultipartFile> images);
 
-  TripResponse updateTrip(Long id, Trip updatedTrip);
+  TripResponse updateTrip(Long id, UpdateTripRequest request, List<MultipartFile> images);
 
   void deleteTrip(Long id);
 

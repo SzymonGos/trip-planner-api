@@ -5,17 +5,20 @@ import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
 import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
+import com.szymong.trip_planner_api.trip.dto.UpdateTripRequest;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
 import com.szymong.trip_planner_api.tripImage.service.TripImageService;
 import com.szymong.trip_planner_api.usage.service.UsageService;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.service.UserService;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -82,21 +85,29 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
-  public TripResponse updateTrip(Long id, Trip updatedTrip) {
+  @Transactional
+  public TripResponse updateTrip(Long id, UpdateTripRequest request, List<MultipartFile> images) {
+    User user = userService.getAuthenticatedUser();
 
-    Optional<Trip> result = tripRepository.findById(id);
+    Trip existingTrip = tripRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trip not found with id: " + id));
 
-    if (result.isEmpty()) {
-      throw new ResourceNotFoundException("Trip not found with id: " + id);
+    if (!Objects.equals(user.getId(), existingTrip.getCreator().getId())) {
+      throw new AccessDeniedException("You are not allowed to update this trip");
     }
 
-    Trip existingTrip = result.get();
+    boolean routeChanged = !Objects.equals(existingTrip.getOrigin(), request.getOrigin()) || !Objects.equals(existingTrip.getDestination(), request.getDestination());
 
-    existingTrip.setTitle(updatedTrip.getTitle());
-    existingTrip.setDescription(updatedTrip.getDescription());
-    existingTrip.setOrigin(updatedTrip.getOrigin());
-    existingTrip.setDestination(updatedTrip.getDestination());
-    existingTrip.setStatus(updatedTrip.getStatus());
+    if (routeChanged) {
+      usageService.incrementGoogleMapsUsage(user);
+    }
+
+    existingTrip.setTitle(request.getTitle());
+    existingTrip.setDescription(request.getDescription());
+    existingTrip.setOrigin(request.getOrigin());
+    existingTrip.setDestination(request.getDestination());
+    existingTrip.setStatus(request.getStatus());
+
+    tripImageService.addTripImages(existingTrip, images);
 
     return tripMapper.mapToResponse(tripRepository.save(existingTrip));
   }

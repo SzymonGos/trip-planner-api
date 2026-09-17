@@ -4,6 +4,7 @@ import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
 import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
+import com.szymong.trip_planner_api.trip.dto.UpdateTripRequest;
 import com.szymong.trip_planner_api.trip.service.TripService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -38,8 +39,8 @@ public class TripController {
   }
 
   @PutMapping("/{id}")
-  public TripResponse updateTrip(@PathVariable Long id, @Valid @RequestBody Trip trip) {
-    return tripService.updateTrip(id, trip);
+  public TripResponse updateTrip(@PathVariable Long id, @RequestPart UpdateTripRequest request,  @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+    return tripService.updateTrip(id, request, images);
   }
 
   @DeleteMapping("/{id}")
