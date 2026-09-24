@@ -31,9 +31,4 @@ public class TripImageController {
   public TripImage createTripImage(@RequestParam Long tripId, @RequestBody TripImage tripImage) {
     return tripImageService.createTripImage(tripId, tripImage);
   }
-
-  @DeleteMapping("/{id}")
-  public void deleteTripImage(@PathVariable Long id) {
-    tripImageService.deleteTripImage(id);
-  }
 }

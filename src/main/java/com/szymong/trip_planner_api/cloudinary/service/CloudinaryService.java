@@ -6,4 +6,6 @@ public interface CloudinaryService {
   String uploadProfileImage(MultipartFile file);
 
   String uploadTripImage(MultipartFile file);
+
+  void deleteImage(String publicId);
 }

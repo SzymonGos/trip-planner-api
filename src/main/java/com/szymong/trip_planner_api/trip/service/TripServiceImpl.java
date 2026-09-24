@@ -106,6 +106,11 @@ public class TripServiceImpl implements TripService {
     existingTrip.setOrigin(request.getOrigin());
     existingTrip.setDestination(request.getDestination());
     existingTrip.setStatus(request.getStatus());
+    existingTrip.setDistanceMeters(request.getDistanceMeters());
+    existingTrip.setEstimatedDurationSeconds(request.getEstimatedDurationSeconds());
+
+    tripImageService.removeTripImages(existingTrip, request.getRemovedImageIds()
+    );
 
     tripImageService.addTripImages(existingTrip, images);
 
@@ -116,6 +121,4 @@ public class TripServiceImpl implements TripService {
   public void deleteTrip(Long id) {
     tripRepository.deleteById(id);
   }
-
-
 }
