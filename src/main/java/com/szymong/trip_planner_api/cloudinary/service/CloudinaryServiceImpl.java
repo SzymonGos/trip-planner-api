@@ -18,17 +18,17 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     this.cloudinary = cloudinary;
   }
 
-
   @Override
   public String uploadProfileImage(MultipartFile file) {
-    return uploadImage(file,CloudinaryFolder.PROFILE_IMAGES);
+    return uploadImage(file, CloudinaryFolder.PROFILE_IMAGES);
   }
 
-  @Override public String uploadTripImage(MultipartFile file){
+  @Override
+  public String uploadTripImage(MultipartFile file) {
     return uploadImage(file, CloudinaryFolder.TRIP_IMAGES);
   }
 
-  private String uploadImage(MultipartFile file,CloudinaryFolder folder ) {
+  private String uploadImage(MultipartFile file, CloudinaryFolder folder) {
     try {
       Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("asset_folder", folder.getPath()));
 
@@ -36,6 +36,25 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     } catch (IOException e) {
       throw new RuntimeException("Failed to upload image to Cloudinary", e);
+    }
+  }
+
+  @Override
+  public void deleteImage(String publicId) {
+    if (publicId == null || publicId.isBlank()) {
+      return;
+    }
+
+    try {
+      Map<?, ?> deleteResult = cloudinary.uploader().destroy(publicId, ObjectUtils.asMap("resource_type", "image", "invalidate", true));
+
+      String result = String.valueOf(deleteResult.get("result"));
+
+      if (!result.equals("ok") && !result.equals("not found")) {
+        throw new RuntimeException("Unexpected Cloudinary deletion result: " + result);
+      }
+    } catch (IOException exception) {
+      throw new RuntimeException("Failed to delete image from Cloudinary: " + publicId, exception);
     }
   }
 
@@ -49,6 +68,5 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     CloudinaryFolder(String path) {
       this.path = path;
     }
-
   }
 }

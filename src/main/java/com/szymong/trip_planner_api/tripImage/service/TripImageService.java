@@ -17,5 +17,5 @@ public interface TripImageService {
 
   void addTripImages(Trip trip, List<MultipartFile> images);
 
-  void deleteTripImage(Long id);
+  void removeTripImages(Trip trip, List<Long> imageIds);
 }
