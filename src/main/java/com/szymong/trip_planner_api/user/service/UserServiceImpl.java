@@ -1,5 +1,6 @@
 package com.szymong.trip_planner_api.user.service;
 
+import com.szymong.trip_planner_api.cloudinary.event.CloudinaryImageDeletionRequestedEvent;
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryService;
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryServiceImpl;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
@@ -11,9 +12,11 @@ import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.dto.*;
 import com.szymong.trip_planner_api.user.mapper.UserMapper;
 import com.szymong.trip_planner_api.user.repository.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -28,14 +31,16 @@ public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
   private final TripMapper tripMapper;
   private final ImageFileValidator imageFileValidator;
+  private final ApplicationEventPublisher eventPublisher;
 
-  public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, CloudinaryService cloudinaryService, UserMapper userMapper, TripMapper tripMapper, ImageFileValidator imageFileValidator) {
+  public UserServiceImpl(UserRepository userRepository, TripRepository tripRepository, CloudinaryService cloudinaryService, UserMapper userMapper, TripMapper tripMapper, ImageFileValidator imageFileValidator, ApplicationEventPublisher eventPublisher) {
     this.userRepository = userRepository;
     this.tripRepository = tripRepository;
     this.cloudinaryService = cloudinaryService;
     this.userMapper = userMapper;
     this.tripMapper = tripMapper;
     this.imageFileValidator = imageFileValidator;
+    this.eventPublisher = eventPublisher;
   }
 
   public UserResponse getUserById(Long id) {
@@ -90,7 +95,6 @@ public class UserServiceImpl implements UserService {
   }
   @Override
   public CreateUserResponse createUser(CreateUserRequest request) {
-
     Optional<User> existingUser = userRepository.findByClerkId(request.getClerkId());
 
     if (existingUser.isPresent()) {
@@ -108,21 +112,47 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UpdateCurrentUserResponse updateUser(UpdateCurrentUserRequest request, MultipartFile profileImage) {
+  @Transactional
+  public UpdateCurrentUserResponse updateUser(
+          UpdateCurrentUserRequest request,
+          MultipartFile profileImage
+  ) {
     User user = getAuthenticatedUser();
 
     user.setUsername(request.getUsername());
-    if(profileImage != null){
+
+    String oldProfileImagePublicId = null;
+
+    if (profileImage != null && !profileImage.isEmpty()) {
       imageFileValidator.validateImage(profileImage);
 
-      String publicId = cloudinaryService.uploadProfileImage(profileImage);
+      oldProfileImagePublicId =
+              user.getProfileImagePublicId();
 
-      user.setProfileImagePublicId(publicId);
+      String newProfileImagePublicId =
+              cloudinaryService.uploadProfileImage(profileImage);
+
+      user.setProfileImagePublicId(
+              newProfileImagePublicId
+      );
     }
 
     User updatedUser = userRepository.save(user);
 
-    return userMapper.mapToUpdateCurrentUserResponse(updatedUser);
+    if (
+            oldProfileImagePublicId != null &&
+                    !oldProfileImagePublicId.isBlank()
+    ) {
+      eventPublisher.publishEvent(
+              new CloudinaryImageDeletionRequestedEvent(
+                      List.of(oldProfileImagePublicId)
+              )
+      );
+    }
+
+    return userMapper.mapToUpdateCurrentUserResponse(
+            updatedUser
+    );
   }
 
   private User findUserById(Long id) {

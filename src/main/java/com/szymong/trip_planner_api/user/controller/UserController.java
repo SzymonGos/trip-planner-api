@@ -48,7 +48,7 @@ public class UserController {
   @PostMapping
   public CreateUserResponse createUser(@RequestBody CreateUserRequest request) { return userService.createUser(request); }
 
-  @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PutMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public UpdateCurrentUserResponse updateUser(@RequestPart("request") UpdateCurrentUserRequest request, @RequestPart(value = "profileImage", required = false) MultipartFile profileImage){
     return userService.updateUser(request, profileImage);
   }

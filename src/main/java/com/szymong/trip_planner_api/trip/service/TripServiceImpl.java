@@ -109,8 +109,7 @@ public class TripServiceImpl implements TripService {
     existingTrip.setDistanceMeters(request.getDistanceMeters());
     existingTrip.setEstimatedDurationSeconds(request.getEstimatedDurationSeconds());
 
-    tripImageService.removeTripImages(existingTrip, request.getRemovedImageIds()
-    );
+    tripImageService.removeTripImages(existingTrip, request.getRemovedImageIds());
 
     tripImageService.addTripImages(existingTrip, images);
 
