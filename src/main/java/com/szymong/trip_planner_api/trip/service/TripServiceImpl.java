@@ -2,6 +2,7 @@ package com.szymong.trip_planner_api.trip.service;
 
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.TripStatus;
 import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
 import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
@@ -17,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -62,8 +61,12 @@ public class TripServiceImpl implements TripService {
   @Override
   @Transactional
   public CreateTripResponse createTrip(CreateTripRequest request, List<MultipartFile> images) {
-
     User user = userService.getAuthenticatedUser();
+
+    if (request.getStatus() == TripStatus.PLANNING && hasImages(images)) {
+      throw new IllegalArgumentException("A trip in PLANNING status cannot have images");
+    }
+
     usageService.incrementGoogleMapsUsage(user);
 
     Trip newTrip = new Trip();
@@ -101,6 +104,16 @@ public class TripServiceImpl implements TripService {
       usageService.incrementGoogleMapsUsage(user);
     }
 
+    if (request.getStatus() == TripStatus.PLANNING) {
+      Set<Long> removedIds = request.getRemovedImageIds() == null ? Set.of() : new HashSet<>(request.getRemovedImageIds());
+
+      boolean existingImagesWillRemain = existingTrip.getTripImages().stream().anyMatch(image -> !removedIds.contains(image.getId()));
+
+      if (existingImagesWillRemain || hasImages(images)) {
+        throw new IllegalArgumentException("Remove all images before changing the trip status to PLANNING");
+      }
+    }
+
     existingTrip.setTitle(request.getTitle());
     existingTrip.setDescription(request.getDescription());
     existingTrip.setOrigin(request.getOrigin());
@@ -119,5 +132,9 @@ public class TripServiceImpl implements TripService {
   @Override
   public void deleteTrip(Long id) {
     tripRepository.deleteById(id);
+  }
+
+  private boolean hasImages(List<MultipartFile> images) {
+    return images != null && images.stream().anyMatch(image -> image != null && !image.isEmpty());
   }
 }

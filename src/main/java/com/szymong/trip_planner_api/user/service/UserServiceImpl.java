@@ -2,7 +2,6 @@ package com.szymong.trip_planner_api.user.service;
 
 import com.szymong.trip_planner_api.cloudinary.event.CloudinaryImageDeletionRequestedEvent;
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryService;
-import com.szymong.trip_planner_api.cloudinary.service.CloudinaryServiceImpl;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.image.validation.ImageFileValidator;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
