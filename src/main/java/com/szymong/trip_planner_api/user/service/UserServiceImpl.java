@@ -4,6 +4,8 @@ import com.szymong.trip_planner_api.cloudinary.event.CloudinaryImageDeletionRequ
 import com.szymong.trip_planner_api.cloudinary.service.CloudinaryService;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.image.validation.ImageFileValidator;
+import com.szymong.trip_planner_api.trip.Trip;
+import com.szymong.trip_planner_api.trip.TripStatus;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
@@ -60,7 +62,11 @@ public class UserServiceImpl implements UserService {
       throw new ResourceNotFoundException("User not found with username: " + username);
     }
 
-    return userMapper.mapToResponse(result.get());
+    List<TripResponse> completedTrips = tripRepository.findByCreatorIdAndStatus(result.get().getId(), TripStatus.COMPLETED).stream().map(tripMapper::mapToResponse).toList();
+
+    UserResponse response = userMapper.mapToResponse(result.get());
+    response.setUserTrips(completedTrips);
+    return response;
   }
 
   @Override
@@ -92,6 +98,7 @@ public class UserServiceImpl implements UserService {
       throw new ResourceNotFoundException("User not found with clerkId: " + clerkId);
     }
   }
+
   @Override
   public CreateUserResponse createUser(CreateUserRequest request) {
     Optional<User> existingUser = userRepository.findByClerkId(request.getClerkId());
@@ -159,7 +166,7 @@ public class UserServiceImpl implements UserService {
                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
   }
 
-  public User getAuthenticatedUser(){
+  public User getAuthenticatedUser() {
     Authentication authentication = SecurityContextHolder
                                             .getContext()
                                             .getAuthentication();
@@ -172,5 +179,4 @@ public class UserServiceImpl implements UserService {
 
     return getUserByClerkId(clerkId);
   }
-
 }
