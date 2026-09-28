@@ -32,7 +32,7 @@ public class TripImageServiceImpl implements TripImageService {
   private final ImageFileValidator imageFileValidator;
   private final ApplicationEventPublisher eventPublisher;
 
-  public TripImageServiceImpl(TripImageRepository tripImageRepository, TripRepository tripRepository, TripImageMapper tripImageMapper, TripImageProperties tripImageProperties, CloudinaryService cloudinaryService, ImageValidationProperties imageValidationProperties, ImageFileValidator imageFileValidator, ApplicationEventPublisher eventPublisher) {
+  public TripImageServiceImpl(TripImageRepository tripImageRepository, TripRepository tripRepository, TripImageMapper tripImageMapper, TripImageProperties tripImageProperties, CloudinaryService cloudinaryService, ImageFileValidator imageFileValidator, ApplicationEventPublisher eventPublisher) {
     this.tripImageRepository = tripImageRepository;
     this.tripRepository = tripRepository;
     this.tripImageMapper = tripImageMapper;
