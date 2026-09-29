@@ -13,6 +13,8 @@ import com.szymong.trip_planner_api.tripImage.service.TripImageService;
 import com.szymong.trip_planner_api.usage.service.UsageService;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.service.UserService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +56,8 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
-  public List<TripResponse> getAllTrips() {
-    return tripRepository.findAll().stream().map(tripMapper::mapToResponse).toList();
+  public Slice<TripResponse> getAllTrips(Pageable pageable) {
+    return tripRepository.findAll(pageable).map(tripMapper::mapToResponse);
   }
 
   @Override
