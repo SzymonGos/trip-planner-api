@@ -1,12 +1,10 @@
 package com.szymong.trip_planner_api.trip.controller;
 
-import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
 import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.dto.UpdateTripRequest;
 import com.szymong.trip_planner_api.trip.service.TripService;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;

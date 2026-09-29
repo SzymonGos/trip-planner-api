@@ -1,6 +1,5 @@
 package com.szymong.trip_planner_api.trip.service;
 
-import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.dto.CreateTripRequest;
 import com.szymong.trip_planner_api.trip.dto.CreateTripResponse;
 import com.szymong.trip_planner_api.trip.dto.TripResponse;
