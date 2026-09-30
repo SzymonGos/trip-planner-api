@@ -14,8 +14,6 @@ public interface TripService {
 
   TripResponse getTripById(Long id);
 
-  List<TripResponse> getTripsByCreatorId(Long creatorId);
-
   Slice<TripResponse> getAllTrips(Pageable pageable);
 
   CreateTripResponse createTrip(CreateTripRequest request, List<MultipartFile> images);

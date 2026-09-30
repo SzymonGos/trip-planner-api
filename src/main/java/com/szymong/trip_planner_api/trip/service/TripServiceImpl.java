@@ -51,11 +51,6 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
-  public List<TripResponse> getTripsByCreatorId(Long creatorId) {
-    return tripRepository.findByCreatorId(creatorId).stream().map(tripMapper::mapToResponse).toList();
-  }
-
-  @Override
   public Slice<TripResponse> getAllTrips(Pageable pageable) {
     return tripRepository.findAll(pageable).map(tripMapper::mapToResponse);
   }
