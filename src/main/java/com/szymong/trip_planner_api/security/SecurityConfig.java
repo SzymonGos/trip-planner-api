@@ -35,8 +35,11 @@ public class SecurityConfig {
     CorsConfiguration configuration = new CorsConfiguration();
 
     configuration.setAllowedOrigins(List.of(
-            "http://localhost:4000"
-    ));
+            "http://localhost:4000",
+            "https://routetripper.com",
+            "https://www.routetripper.com"
+
+            ));
 
     configuration.setAllowedMethods(List.of(
             "GET",
