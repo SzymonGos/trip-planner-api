@@ -7,6 +7,7 @@ import com.szymong.trip_planner_api.trip.dto.UpdateTripRequest;
 import com.szymong.trip_planner_api.trip.service.TripService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +45,7 @@ public class TripController {
   }
 
   @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteTrip(@PathVariable Long id) {
     tripService.deleteTrip(id);
   }

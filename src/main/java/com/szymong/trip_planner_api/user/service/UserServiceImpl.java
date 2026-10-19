@@ -144,15 +144,8 @@ public class UserServiceImpl implements UserService {
 
     User updatedUser = userRepository.save(user);
 
-    if (
-            oldProfileImagePublicId != null &&
-                    !oldProfileImagePublicId.isBlank()
-    ) {
-      eventPublisher.publishEvent(
-              new CloudinaryImageDeletionRequestedEvent(
-                      List.of(oldProfileImagePublicId)
-              )
-      );
+    if (oldProfileImagePublicId != null && !oldProfileImagePublicId.isBlank()) {
+      eventPublisher.publishEvent(new CloudinaryImageDeletionRequestedEvent(List.of(oldProfileImagePublicId)));
     }
 
     return userMapper.mapToUpdateCurrentUserResponse(

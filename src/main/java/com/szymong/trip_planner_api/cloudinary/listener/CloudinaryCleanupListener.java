@@ -16,11 +16,14 @@ public class CloudinaryCleanupListener {
 
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void handle(CloudinaryImageDeletionRequestedEvent event){
-    for(String publicId: event.publicIds()){
-      try{
+    log.info("Cloudinary cleanup triggered. Public IDs: {}", event.publicIds());
+    for (String publicId : event.publicIds()) {
+      try {
+        log.info("Attempting to delete Cloudinary image: {}", publicId);
         cloudinaryService.deleteImage(publicId);
-      }catch (RuntimeException exception){
-        log.error( "Failed to delete Cloudinary image with publicId: {}",publicId, exception);
+        log.info("Cloudinary deletion method completed for: {}", publicId);
+      } catch (RuntimeException exception) {
+        log.error("Failed to delete Cloudinary image with publicId: {}", publicId, exception);
       }
     }
   }

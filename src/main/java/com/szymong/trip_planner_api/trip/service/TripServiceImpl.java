@@ -1,5 +1,6 @@
 package com.szymong.trip_planner_api.trip.service;
 
+import com.szymong.trip_planner_api.cloudinary.event.CloudinaryImageDeletionRequestedEvent;
 import com.szymong.trip_planner_api.exceptions.ResourceNotFoundException;
 import com.szymong.trip_planner_api.trip.Trip;
 import com.szymong.trip_planner_api.trip.TripStatus;
@@ -9,10 +10,12 @@ import com.szymong.trip_planner_api.trip.dto.TripResponse;
 import com.szymong.trip_planner_api.trip.dto.UpdateTripRequest;
 import com.szymong.trip_planner_api.trip.mapper.TripMapper;
 import com.szymong.trip_planner_api.trip.repository.TripRepository;
+import com.szymong.trip_planner_api.tripImage.TripImage;
 import com.szymong.trip_planner_api.tripImage.service.TripImageService;
 import com.szymong.trip_planner_api.usage.service.UsageService;
 import com.szymong.trip_planner_api.user.User;
 import com.szymong.trip_planner_api.user.service.UserService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,13 +33,15 @@ public class TripServiceImpl implements TripService {
   private final UserService userService;
   private final UsageService usageService;
   private final TripImageService tripImageService;
+  private final ApplicationEventPublisher eventPublisher;
 
-  public TripServiceImpl(TripRepository triprepository, TripMapper tripMapper, UserService userService, UsageService usageService, TripImageService tripImageService) {
+  public TripServiceImpl(TripRepository triprepository, TripMapper tripMapper, UserService userService, UsageService usageService, TripImageService tripImageService, ApplicationEventPublisher eventPublisher) {
     this.tripRepository = triprepository;
     this.tripMapper = tripMapper;
     this.userService = userService;
     this.usageService = usageService;
     this.tripImageService = tripImageService;
+    this.eventPublisher = eventPublisher;
   }
 
   @Override
@@ -127,8 +132,23 @@ public class TripServiceImpl implements TripService {
   }
 
   @Override
+  @Transactional
   public void deleteTrip(Long id) {
-    tripRepository.deleteById(id);
+    User user = userService.getAuthenticatedUser();
+
+    Trip existingTrip = tripRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Trip not found with id: " + id));
+
+    if(!Objects.equals(user.getId(), existingTrip.getCreator().getId())){
+      throw new AccessDeniedException("You are not allowed to delete this trip");
+    }
+
+    List<String> publicIds = existingTrip.getTripImages().stream().map(TripImage::getPublicId).toList();
+
+    tripRepository.delete(existingTrip);
+
+    if (!publicIds.isEmpty()) {
+      eventPublisher.publishEvent(new CloudinaryImageDeletionRequestedEvent(publicIds));
+    }
   }
 
   private boolean hasImages(List<MultipartFile> images) {
