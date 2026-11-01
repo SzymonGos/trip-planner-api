@@ -7,4 +7,6 @@ public interface UsageService {
   UsageResponse getUserUsage();
 
   void incrementGoogleMapsUsage(User user);
+
+  void incrementAiChatUsage(User user);
 }
