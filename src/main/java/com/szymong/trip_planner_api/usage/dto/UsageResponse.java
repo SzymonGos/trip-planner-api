@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 public class UsageResponse {
 
   private Integer googleMapsRouteCount;
-
   private Integer googleMapsMaxLimit;
-
   private LocalDateTime googleMapsRouteResetDate;
+
+  private Integer aiChatUsageCount;
+  private Integer aiChatMaxLimit;
+  private LocalDateTime aiChatUsageResetDate;
 }

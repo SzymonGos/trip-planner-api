@@ -11,10 +11,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class UsageProperties {
 
   public GoogleMaps googleMaps;
+  public AiChat aiChat;
 
   @Getter
   @Setter
   public static class GoogleMaps {
+    private int maxLimit;
+  }
+
+  @Getter
+  @Setter
+  public static class AiChat {
     private int maxLimit;
   }
 }
