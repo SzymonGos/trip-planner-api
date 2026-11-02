@@ -26,7 +26,7 @@ A layered monolithic architecture organized by domain features.
 - **DTOs & Mappers** — separation between API contracts and persistence entities.
 - **Security** — JWT validation with Spring Security and Clerk.
 
-*Architecture diagram goes here.*
+![RouteTripper C4 Container Diagram](docs/architecture.png)
 
 ## Technical Decisions
 
