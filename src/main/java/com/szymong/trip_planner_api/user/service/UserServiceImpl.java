@@ -61,10 +61,9 @@ public class UserServiceImpl implements UserService {
       throw new ResourceNotFoundException("User not found with username: " + username);
     }
 
-    List<TripResponse> completedTrips = tripRepository.findByCreatorIdAndStatus(result.get().getId(), TripStatus.COMPLETED).stream().map(tripMapper::mapToResponse).toList();
-
+    List<TripResponse> userTrips = tripRepository.findByCreatorId(result.get().getId()).stream().map(tripMapper::mapToResponse).toList();
     UserResponse response = userMapper.mapToResponse(result.get());
-    response.setUserTrips(completedTrips);
+    response.setUserTrips(userTrips);
     return response;
   }
 
