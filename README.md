@@ -5,6 +5,9 @@ REST API for [RouteTripper](https://routetripper.com/), a web application for pl
 
 Built with Java and Spring Boot as a hands-on project to explore backend development, application architecture, and database management.
 
+**Live Application:** [RouteTripper](https://routetripper.com/)  
+**Frontend Repository:** [trip-planner-web](https://github.com/SzymonGos/trip-planner-web)
+
 ## Features
 
 - Trip CRUD operations
