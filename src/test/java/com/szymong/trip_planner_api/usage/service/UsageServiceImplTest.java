@@ -69,16 +69,24 @@ class UsageServiceImplTest {
     User user = new User();
     user.setGoogleMapsRouteCount(5);
 
-    UsageProperties.GoogleMaps googleMaps = mock(UsageProperties.GoogleMaps.class);
+    UsageProperties.GoogleMaps googleMaps =
+            mock(UsageProperties.GoogleMaps.class);
+
+    UsageProperties.AiChat aiChat =
+            mock(UsageProperties.AiChat.class);
 
     when(userService.getAuthenticatedUser()).thenReturn(user);
-    when(usageProperties.getGoogleMaps()).thenReturn(googleMaps);
 
+    when(usageProperties.getGoogleMaps()).thenReturn(googleMaps);
     when(googleMaps.getMaxLimit()).thenReturn(10);
+
+    when(usageProperties.getAiChat()).thenReturn(aiChat);
+    when(aiChat.getMaxLimit()).thenReturn(10);
 
     UsageResponse result = usageService.getUserUsage();
 
     assertThat(result.getGoogleMapsRouteCount()).isEqualTo(5);
+    assertThat(result.getGoogleMapsMaxLimit()).isEqualTo(10);
   }
 
 
