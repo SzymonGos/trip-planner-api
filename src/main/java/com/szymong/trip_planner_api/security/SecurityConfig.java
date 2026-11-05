@@ -26,6 +26,7 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/users/username/*").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/trips", "/api/trips/{id}").permitAll()
+        .requestMatchers("/actuator/health").permitAll()
         .anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
     return http.build();
   }
