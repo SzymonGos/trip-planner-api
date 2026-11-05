@@ -1,3 +1,4 @@
+[![Backend CI](https://github.com/SzymonGos/trip-planner-api/actions/workflows/ci.yml/badge.svg)](https://github.com/SzymonGos/trip-planner-api/actions/workflows/ci.yml)
 
 # RouteTripper API
 
@@ -38,6 +39,13 @@ A layered monolithic architecture organized by domain features.
 - **AFTER_COMMIT events** — trigger Cloudinary image cleanup after successful database commits.
 - **Flyway migrations** — version-controlled database changes.
 - **Spring Data Slice** — pagination supporting incremental loading without total-count queries.
+
+## CI/CD
+
+- **GitHub Actions** — automated Maven builds and JUnit/Mockito tests.
+- **Branch Protection** — requires passing CI checks before merging.
+- **Railway** — automatic deployment to production after successful CI.
+- **Spring Boot Actuator** — deployment health checks via `/actuator/health`.
 
 ## Technologies
 
