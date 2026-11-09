@@ -15,6 +15,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -38,8 +40,6 @@ class TripRepositoryIT {
     assertThat(postgres.isRunning()).isTrue();
   }
 
-
-
   @Test
   void shouldDeleteTripWithAssociatedImages() {
     User user = new User();
@@ -49,14 +49,7 @@ class TripRepositoryIT {
 
     entityManager.persist(user);
 
-    Trip trip = new Trip();
-    trip.setCreator(user);
-    trip.setTitle("Trip to Italy");
-    trip.setOrigin("Warsaw");
-    trip.setDestination("Rome");
-    trip.setStatus(TripStatus.COMPLETED);
-    trip.setDistanceMeters(300000L);
-    trip.setEstimatedDurationSeconds(14400L);
+    Trip trip = createTrip(user, "Trip to Italy", TripStatus.COMPLETED);
 
     TripImage image = new TripImage();
     image.setPublicId("cloudinary_test_123");
@@ -71,7 +64,6 @@ class TripRepositoryIT {
 
     entityManager.clear();
 
-
     Trip savedTrip = tripRepository.findById(tripId).orElseThrow();
     tripRepository.delete(savedTrip);
     tripRepository.flush();
@@ -83,4 +75,50 @@ class TripRepositoryIT {
     assertThat(entityManager.find(TripImage.class, imageId)).isNull();
   }
 
+  @Test
+  void shouldFindOnlyCompletedTripsForSpecifiedUser() {
+    User user1 = new User();
+    user1.setClerkId("clerk_user_1");
+    user1.setEmail("user1@example.com");
+    user1.setUsername("user1");
+
+    User user2 = new User();
+    user2.setClerkId("clerk_user_2");
+    user2.setEmail("user2@example.com");
+    user2.setUsername("user2");
+
+    entityManager.persist(user1);
+    entityManager.persist(user2);
+
+    Trip completedTrip = createTrip(user1, "Trip to Italy", TripStatus.COMPLETED);
+
+    Trip planningTrip = createTrip(user1, "Trip to Germany", TripStatus.PLANNING);
+
+    Trip otherUserTrip = createTrip(user2, "Trip to France", TripStatus.COMPLETED);
+
+    entityManager.persist(completedTrip);
+    entityManager.persist(planningTrip);
+    entityManager.persist(otherUserTrip);
+
+    entityManager.flush();
+    entityManager.clear();
+
+    List<Trip> result = tripRepository.findByCreatorIdAndStatus(user1.getId(), TripStatus.COMPLETED);
+
+    assertThat(result).hasSize(1).extracting(Trip::getTitle).containsExactly("Trip to Italy");}
+
+  private Trip createTrip(User creator, String title, TripStatus status
+  ) {
+    Trip trip = new Trip();
+
+    trip.setCreator(creator);
+    trip.setTitle(title);
+    trip.setOrigin("Warsaw");
+    trip.setDestination("Rome");
+    trip.setStatus(status);
+    trip.setDistanceMeters(300000L);
+    trip.setEstimatedDurationSeconds(14400L);
+
+    return trip;
+  }
 }
